@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <algorithm>
 
 using namespace std;
 
@@ -71,6 +72,37 @@ class Solution {
 
 			return ret;
     }
+		string addBinary2(string a, string b) {
+			string result = "";
+			int carry, i, j;
+
+			carry = 0;
+			i = a.size() - 1;
+			j = b.size() - 1;
+
+			// Runs until both strings are exhausted
+			// or there the carry is 1
+			while (carry == 1 || i >= 0 || j >= 0)
+			{
+				// Add to carry from both strings
+				carry += (i >= 0) ? (a[i--] - '0') : 0;
+				carry += (j >= 0) ? (b[j--] - '0') : 0;
+
+				// Append carry to result string
+				// If carry is 0 or 2 then append 0
+				// because 1 + 1 is 0 in binary
+				// Adding '0' converts integer to ascii
+				result = char((carry % 2) + '0');
+
+				// If carry is 2 or 3, there is carry
+				// otherwise 0 for next loop
+				// 3 in case of carry is one in previous loop
+				carry /= 2;
+			}
+
+			reverse(result.begin(),result.end());
+			return result;
+		}
 };
 
 int main()
@@ -80,7 +112,7 @@ int main()
 	string b ("1011");
 	string ret;
 
-	ret = solution.addBinary(a, b);
+	ret = solution.addBinary2(a, b);
 
 	cout << "A: " << a << endl;
 	cout << "int A: " << binaryStringToInt(a) << endl;
